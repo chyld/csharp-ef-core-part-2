@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Linq;
+using lib;
 
 namespace app
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+      using var db = new Database();
+      Student s = new Student() { Name = "Bob", Email = "very long email" };
+      db.Add(s);
+      db.SaveChanges();
     }
+  }
 }
