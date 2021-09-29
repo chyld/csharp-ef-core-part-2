@@ -9,7 +9,7 @@ using lib;
 namespace lib.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210929110330_Initial")]
+    [Migration("20210929133218_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,6 @@ namespace lib.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(22)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -10,7 +10,6 @@ namespace lib
   {
     public int Id { get; set; }  // primary key
     [Required]
-    [StringLength(22)]
     public string Name { get; set; } // required field
     [Required]
     [Column(TypeName = "varchar(35)")]

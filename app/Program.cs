@@ -13,8 +13,8 @@ namespace app
       using var db = new Database();
       Student s = new Student("Janet", "janet@aol.com");
       s.Books.AddRange(new Book[] {
-        new () { SerialNumber = "1111", Title = "Algebra I" },
-        new () { SerialNumber = "2222", Title = "Chemistry I" }
+        new () { SerialNumber = "0001", Title = "Algebra I" },
+        new () { SerialNumber = "0002", Title = "Chemistry I" }
       });
       Teacher t = new Teacher("Wallace");
       Klass k = new Klass("MAT-104") { Description = "Logic", Department = "Mathematics" };
@@ -47,6 +47,31 @@ namespace app
       var chem = db.Klasses.Where(k => k.Name == "CHEM-101").Include(k => k.Students).First();
       foreach (var chemr in chem.Registrations)
         Console.WriteLine($"{chemr.Student.Name} took {chemr.Klass.Name} and made an {chemr.Grade}");
+
+      // get a list of names of classes that Mrs. Jackson teaches
+      // need to include Klasses in the query
+      var listOfKlassNames = db.Teachers
+      .Where(t => t.Name == "Mrs. Jackson")
+      .Include(t => t.Klasses)
+      .First()
+      .Klasses
+      .Select(k => k.Name);
+      listOfKlassNames.ToList().ForEach(name => Console.WriteLine(name));
+
+      // get student email that owns a particular book
+      var studentEmail = db.Books.Where(b => b.SerialNumber == "0005").First().Owner.Email;
+      Console.WriteLine($"The email address of the student using book 0005 is : {studentEmail}");
+
+      // a fairly involved query
+      db.Teachers
+      .Where(t => t.Name == "Mrs. Jackson")
+      .Include(t => t.Klasses)
+      .ThenInclude(k => k.Registrations)
+      .First()
+      .Klasses
+      .SelectMany(k => k.Registrations, (klass, registration) => new { klass.Name, registration.Grade })
+      .ToList()
+      .ForEach(o => Console.WriteLine($"Class : {o.Name}, Grade : {o.Grade}"));
     }
   }
 }

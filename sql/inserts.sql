@@ -14,3 +14,16 @@ insert into Registrations (KlassName, StudentId, Grade) values ("CHEM-101", 1, 9
 insert into Registrations (KlassName, StudentId, Grade) values ("CHEM-102", 1, 88);
 insert into Registrations (KlassName, StudentId, Grade) values ("MAT-101", 1, 75);
 insert into Registrations (KlassName, StudentId, Grade) values ("CHEM-101", 2, 95);
+insert into Registrations (KlassName, StudentId, Grade) values ("MAT-103", 2, 93);
+
+insert into Teachers (Name) values ("Mrs. Jackson");
+insert into Teachers (Name) values ("Mr. Jets");
+insert into Teachers (Name) values ("Miss. Franklin");
+
+INSERT into KlassTeacher (KlassesName, TeachersId) values ("CHEM-101", 1);
+INSERT into KlassTeacher (KlassesName, TeachersId) values ("CHEM-101", 2);
+INSERT into KlassTeacher (KlassesName, TeachersId) values ("MAT-103", 1);
+
+insert into Books (serialnumber, title, ownerid) values ("0003", "Calculus I", 1);
+insert into Books (serialnumber, title, ownerid) values ("0004", "Beginner Linear Algebra", 2);
+insert into Books (serialnumber, title, ownerid) values ("0005", "Calculus II", 2);

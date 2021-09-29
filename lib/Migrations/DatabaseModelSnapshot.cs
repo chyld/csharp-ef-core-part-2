@@ -98,7 +98,6 @@ namespace lib.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(22)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
