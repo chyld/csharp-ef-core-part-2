@@ -16,41 +16,25 @@ namespace lib.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.10");
 
-            modelBuilder.Entity("KlassStudent", b =>
-                {
-                    b.Property<string>("KlassesName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("KlassesName", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("KlassStudent");
-                });
-
             modelBuilder.Entity("KlassTeacher", b =>
                 {
                     b.Property<string>("KlassesName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TeachersTeacherId")
+                    b.Property<int>("TeachersId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("KlassesName", "TeachersTeacherId");
+                    b.HasKey("KlassesName", "TeachersId");
 
-                    b.HasIndex("TeachersTeacherId");
+                    b.HasIndex("TeachersId");
 
                     b.ToTable("KlassTeacher");
                 });
 
             modelBuilder.Entity("lib.Book", b =>
                 {
-                    b.Property<int>("BId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ISBN")
                         .HasColumnType("TEXT");
@@ -58,13 +42,10 @@ namespace lib.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("SerialNumber")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("BId");
+                    b.HasKey("SerialNumber");
 
                     b.HasIndex("OwnerId");
 
@@ -80,12 +61,29 @@ namespace lib.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Name");
 
                     b.ToTable("Klasses");
+                });
+
+            modelBuilder.Entity("lib.Registration", b =>
+                {
+                    b.Property<string>("KlassName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Grade")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("KlassName", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Registrations");
                 });
 
             modelBuilder.Entity("lib.Student", b =>
@@ -95,11 +93,12 @@ namespace lib.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(35)
+                        .IsRequired()
                         .HasColumnType("varchar(35)");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(22)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -109,31 +108,16 @@ namespace lib.Migrations
 
             modelBuilder.Entity("lib.Teacher", b =>
                 {
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("TeacherId");
+                    b.HasKey("Id");
 
                     b.ToTable("Teachers");
-                });
-
-            modelBuilder.Entity("KlassStudent", b =>
-                {
-                    b.HasOne("lib.Klass", null)
-                        .WithMany()
-                        .HasForeignKey("KlassesName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("lib.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("KlassTeacher", b =>
@@ -146,7 +130,7 @@ namespace lib.Migrations
 
                     b.HasOne("lib.Teacher", null)
                         .WithMany()
-                        .HasForeignKey("TeachersTeacherId")
+                        .HasForeignKey("TeachersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -160,9 +144,35 @@ namespace lib.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("lib.Registration", b =>
+                {
+                    b.HasOne("lib.Klass", "Klass")
+                        .WithMany("Registrations")
+                        .HasForeignKey("KlassName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("lib.Student", "Student")
+                        .WithMany("Registrations")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Klass");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("lib.Klass", b =>
+                {
+                    b.Navigation("Registrations");
+                });
+
             modelBuilder.Entity("lib.Student", b =>
                 {
                     b.Navigation("Books");
+
+                    b.Navigation("Registrations");
                 });
 #pragma warning restore 612, 618
         }
